@@ -1,24 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import { lazy } from "react";
+import { Routes, Route } from "react-router-dom";
+import "./App.css";
+import { SharedLayout } from "./Components/SharedLayout";
+
+const Home = lazy(() => import("../src/Pages/Home"));
+const Animal = lazy(() => import("../src/Pages/AnimalProfile"));
+const Exercises = lazy(() => import("../src/Pages/ExercisesList"));
+const User = lazy(() => import("../src/Pages/UserProfile"));
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<SharedLayout />}></Route>
+    </Routes>
   );
 }
 

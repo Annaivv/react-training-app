@@ -1,0 +1,18 @@
+import { Suspense } from "react";
+import { Outlet } from "react-router-dom";
+import { Container, CssBaseline } from "@mui/material";
+import ResponsiveAppBar from "./ResponsiveAppBar";
+
+export const SharedLayout = () => {
+  return (
+    <>
+      <CssBaseline />
+      <Container maxWidth="xl">
+        <ResponsiveAppBar />
+        <Suspense fallback={<div>Loading page...</div>}>
+          <Outlet />
+        </Suspense>
+      </Container>
+    </>
+  );
+};
