@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import InputBase from "@mui/material/InputBase";
@@ -16,8 +17,22 @@ import MenuItem from "@mui/material/MenuItem";
 import SearchIcon from "@mui/icons-material/Search";
 import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
 
-const pages = ["Animals", "Exercises", "Blog"];
+const menuItems = [
+  { text: "Animals", to: "/animals" },
+  { text: "Exercises", to: "/exercises" },
+  { text: "Blog", to: "/blog" },
+];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
+const MenuItemLink = (props) => {
+  const { to, children, ...other } = props;
+
+  return (
+    <MenuItem component={RouterLink} to={to} {...other}>
+      {children}
+    </MenuItem>
+  );
+};
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -115,10 +130,14 @@ function ResponsiveAppBar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
+              {menuItems.map((item) => (
+                <MenuItemLink
+                  key={item.text}
+                  to={item.to}
+                  onClick={handleCloseNavMenu}
+                >
+                  <Typography textAlign="center">{item.text}</Typography>
+                </MenuItemLink>
               ))}
             </Menu>
           </Box>
@@ -127,13 +146,13 @@ function ResponsiveAppBar() {
           />
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {menuItems.map((item) => (
               <Button
-                key={page}
+                key={item.text}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {item.text}
               </Button>
             ))}
           </Box>

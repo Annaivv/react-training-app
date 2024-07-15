@@ -1,18 +1,18 @@
-import logo from "./logo.svg";
-import { lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { SharedLayout } from "./Components/SharedLayout";
-
-const Home = lazy(() => import("../src/Pages/Home"));
-const Animal = lazy(() => import("../src/Pages/AnimalProfile"));
-const Exercises = lazy(() => import("../src/Pages/ExercisesList"));
-const User = lazy(() => import("../src/Pages/UserProfile"));
+import { Home } from "./Pages/Home";
+import { Animals } from "./Pages/AnimalsList";
+import { ExercisesList } from "../src/Pages/ExercisesList";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<SharedLayout />}></Route>
+      <Route path="/" element={<SharedLayout />}>
+        <Route index element={<Home />} />
+        <Route path="animals" element={<Animals />} />
+        <Route path="exercises" element={<ExercisesList />} />
+      </Route>
     </Routes>
   );
 }
