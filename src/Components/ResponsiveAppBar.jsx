@@ -20,7 +20,6 @@ import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
 const menuItems = [
   { text: "Animals", to: "/animals" },
   { text: "Exercises", to: "/exercises" },
-  { text: "Blog", to: "/blog" },
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -97,9 +96,11 @@ function ResponsiveAppBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <DynamicFeedIcon
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-          />
+          <MenuItemLink to="/" component={RouterLink}>
+            <DynamicFeedIcon
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            />
+          </MenuItemLink>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -132,6 +133,7 @@ function ResponsiveAppBar() {
             >
               {menuItems.map((item) => (
                 <MenuItemLink
+                  component={RouterLink}
                   key={item.text}
                   to={item.to}
                   onClick={handleCloseNavMenu}
@@ -141,14 +143,18 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <DynamicFeedIcon
-            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-          />
+          <MenuItemLink to="/" component={RouterLink}>
+            <DynamicFeedIcon
+              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+            />
+          </MenuItemLink>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {menuItems.map((item) => (
               <Button
+                component={RouterLink}
                 key={item.text}
+                to={item.to}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
