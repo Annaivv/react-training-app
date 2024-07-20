@@ -4,6 +4,7 @@ import { SharedLayout } from "./Components/SharedLayout";
 import { Home } from "./Pages/Home";
 import { Animals } from "./Pages/AnimalsList";
 import { ExercisesList } from "../src/Pages/ExercisesList";
+import { AnimalCard } from "./Pages/AnimalCard";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Route path="/" element={<SharedLayout />}>
         <Route index element={<Home />} />
         <Route path="animals" element={<Animals />} />
+        <Route path="animals/:id" element={<AnimalCard />} />
         <Route path="exercises" element={<ExercisesList />} />
       </Route>
     </Routes>
