@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useParams, useLocation } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
@@ -8,14 +9,23 @@ import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import { CardActionArea } from "@mui/material";
 import horseImage from "../assets/horse.jpg";
-import { getAnimalById } from "../fakeAPI";
 import { BackLink } from "../Components/BackLink";
 
 export const AnimalCard = () => {
   const { id } = useParams();
-  const animal = getAnimalById(id);
+  const [animal, setAnimal] = React.useState(null);
   const location = useLocation();
   const backLinkHref = location.state?.from ?? "/animals";
+
+  React.useEffect(() => {
+    const savedAnimals = JSON.parse(localStorage.getItem("animals"));
+    const foundAnimal = savedAnimals?.find((animal) => animal.id === id);
+    setAnimal(foundAnimal);
+  }, [id]);
+
+  if (!animal) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container sx={{ paddingBottom: 3, paddingTop: 3 }}>

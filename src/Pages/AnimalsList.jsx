@@ -43,7 +43,7 @@ export const Animals = () => {
         <Stack spacing={2}>
           {animals.map((animal) => (
             <Link
-              to={`${animal.id}`}
+              to={`/animals/${animal.id}`}
               state={{ from: location }}
               key={animal.id}
               sx={{ textDecoration: "none" }}

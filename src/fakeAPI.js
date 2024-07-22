@@ -14,7 +14,3 @@ const animals = [
 export const getAnimals = () => {
   return animals;
 };
-
-export const getAnimalById = (animalId) => {
-  return animals.find((animal) => animal.id === animalId);
-};
