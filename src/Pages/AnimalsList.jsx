@@ -6,7 +6,7 @@ import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ClearIcon from "@mui/icons-material/Clear";
-import { getAnimals } from "../fakeAPI";
+import { getAnimals } from "../fakeAPI-animals";
 import { Link, useLocation } from "react-router-dom";
 import { AddAnimalForm } from "../Components/AddAnimalForm";
 import { Typography } from "@mui/material";
