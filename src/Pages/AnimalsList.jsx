@@ -8,7 +8,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ClearIcon from "@mui/icons-material/Clear";
 import { getAnimals } from "../fakeAPI-animals";
 import { Link, useLocation } from "react-router-dom";
-import { AddAnimalForm } from "../Components/AddAnimalForm";
+import { AddNewAnimalForm } from "../Components/AddAnimalForm";
 import { Typography } from "@mui/material";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -19,7 +19,6 @@ const Item = styled(Paper)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   color: theme.palette.text.secondary,
-  //maxWidth: 345,
 }));
 
 export const Animals = () => {
@@ -83,7 +82,7 @@ export const Animals = () => {
         </IconButton>
       </Box>
       {open && (
-        <AddAnimalForm
+        <AddNewAnimalForm
           open={open}
           handleCloseForm={handleCloseForm}
           handleAddAnimal={handleAddAnimal}
