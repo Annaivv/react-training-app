@@ -11,7 +11,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 interface IFormInput {
   name: string;
-  age?: number;
+  age: number;
   description?: string;
 }
 
@@ -28,24 +28,18 @@ export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
 }) => {
   const {
     control,
-    register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<IFormInput>();
 
-  const onSubmit: SubmitHandler<IFormInput> = () => {
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
     const newAnimal = {
       id: nanoid(),
-      name: watch("name"),
-      age: watch("age"),
-      description: watch("description"),
+      ...data,
     };
     handleAddAnimal(newAnimal);
     handleCloseForm();
   };
-
-  console.log(errors);
 
   return (
     <Dialog open={open} onClose={handleCloseForm}>
@@ -56,11 +50,12 @@ export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
         </DialogContentText>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
-            {...register("name", {
-              required: "This field is required",
-            })}
             name="name"
             control={control}
+            defaultValue=""
+            rules={{
+              required: "This field is required",
+            }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -73,19 +68,20 @@ export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
                 variant="standard"
                 error={!!errors.name}
                 helperText={errors.name ? errors.name.message : ""}
+                value={field.value ?? ""}
               />
             )}
           />
 
           <Controller
-            {...register("age", {
-              required: "This field is required",
-              valueAsNumber: true,
-              validate: (v) =>
-                (v !== undefined && v > 0) || "Age must be a positive number",
-            })}
             name="age"
             control={control}
+            defaultValue={undefined}
+            rules={{
+              required: "This field is required",
+              validate: (v) =>
+                (v !== undefined && v > 0) || "Age must be a positive number",
+            }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -98,12 +94,12 @@ export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
                 error={!!errors.age}
                 helperText={errors.age ? errors.age.message : ""}
                 inputProps={{ min: 1 }}
+                value={field.value ?? ""}
               />
             )}
           />
 
           <Controller
-            {...register("description")}
             name="description"
             control={control}
             render={({ field }) => (
@@ -116,6 +112,7 @@ export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
                 fullWidth
                 multiline
                 variant="standard"
+                value={field.value ?? ""}
               />
             )}
           />
