@@ -9,8 +9,7 @@ const Button_1 = __importDefault(require("@mui/material/Button"));
 const ArrowBack_1 = __importDefault(require("@mui/icons-material/ArrowBack"));
 const react_router_dom_1 = require("react-router-dom");
 const BackLink = ({ to, children }) => {
-    return (react_1.default.createElement(react_router_dom_1.Link, { to: to },
-        react_1.default.createElement(Button_1.default, { variant: "outlined", startIcon: react_1.default.createElement(ArrowBack_1.default, null) }, children)));
+    return (react_1.default.createElement(Button_1.default, { variant: "outlined", startIcon: react_1.default.createElement(ArrowBack_1.default, null), component: react_router_dom_1.Link, to: to }, children));
 };
 exports.BackLink = BackLink;
 //# sourceMappingURL=BackLink.js.map

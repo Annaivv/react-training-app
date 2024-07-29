@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { MouseEvent } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -16,22 +16,13 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import SearchIcon from "@mui/icons-material/Search";
 import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
+import { MenuItemLink } from "./MenuItemLink";
 
 const menuItems = [
   { text: "Animals", to: "/animals" },
   { text: "Exercises", to: "/exercises" },
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
-const MenuItemLink = (props) => {
-  const { to, children, ...other } = props;
-
-  return (
-    <MenuItem component={RouterLink} to={to} {...other}>
-      {children}
-    </MenuItem>
-  );
-};
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -74,13 +65,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] =
+    React.useState<HTMLButtonElement | null>(null);
+  const [anchorElUser, setAnchorElUser] =
+    React.useState<HTMLButtonElement | null>(null);
 
-  const handleOpenNavMenu = (event) => {
+  const handleOpenNavMenu = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
+  const handleOpenUserMenu = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorElUser(event.currentTarget);
   };
 
@@ -133,7 +126,6 @@ function ResponsiveAppBar() {
             >
               {menuItems.map((item) => (
                 <MenuItemLink
-                  component={RouterLink}
                   key={item.text}
                   to={item.to}
                   onClick={handleCloseNavMenu}
