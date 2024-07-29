@@ -9,21 +9,17 @@ import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import horseImage from "../assets/horse.jpg";
 import { BackLink } from "../Components/BackLink";
+import useStore from "../store";
 
 export const AnimalCard = () => {
   const { id } = useParams();
-  const [animal, setAnimal] = React.useState(null);
+  const { animals } = useStore();
+  const animal = animals.find((animal) => animal.id === id);
   const location = useLocation();
   const backLinkHref = location.state?.from ?? "/animals";
 
-  React.useEffect(() => {
-    const savedAnimals = JSON.parse(localStorage.getItem("animals"));
-    const foundAnimal = savedAnimals?.find((animal) => animal.id === id);
-    setAnimal(foundAnimal);
-  }, [id]);
-
   if (!animal) {
-    return <div>Loading...</div>;
+    return <Typography>Animal not found</Typography>;
   }
 
   return (

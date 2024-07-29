@@ -10,6 +10,7 @@ import { getAnimals } from "../fakeAPI-animals";
 import { Link, useLocation } from "react-router-dom";
 import { AddNewAnimalForm } from "../Components/AddAnimalForm";
 import { Typography } from "@mui/material";
+import useStore from "../store";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -23,31 +24,12 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export const Animals = () => {
   const location = useLocation();
-  const [animals, setAnimals] = React.useState(() => {
-    const savedAnimals = localStorage.getItem("animals");
-    return savedAnimals ? JSON.parse(savedAnimals) : getAnimals();
-  });
+  const { animals, addAnimal, removeAnimal } = useStore();
   const [open, setOpen] = React.useState(false);
 
   const handleOpenForm = () => setOpen(true);
 
   const handleCloseForm = () => setOpen(false);
-
-  const handleAddAnimal = (newAnimal) => {
-    setAnimals((prevAnimals) => {
-      const updatedAnimals = [...prevAnimals, newAnimal];
-      localStorage.setItem("animals", JSON.stringify(updatedAnimals));
-      return updatedAnimals;
-    });
-  };
-
-  const handleRemoveAnimal = (id) => {
-    setAnimals((prevAnimals) => {
-      const updatedAnimals = prevAnimals.filter((animal) => animal.id !== id);
-      localStorage.setItem("animals", JSON.stringify(updatedAnimals));
-      return updatedAnimals;
-    });
-  };
 
   return (
     <>
@@ -65,7 +47,7 @@ export const Animals = () => {
               <IconButton
                 color="error"
                 aria-label="remove animal"
-                onClick={() => handleRemoveAnimal(animal.id)}
+                onClick={() => removeAnimal(animal.id)}
               >
                 <ClearIcon fontSize="medium" />
               </IconButton>
@@ -85,7 +67,7 @@ export const Animals = () => {
         <AddNewAnimalForm
           open={open}
           handleCloseForm={handleCloseForm}
-          handleAddAnimal={handleAddAnimal}
+          handleAddAnimal={(newAnimal) => addAnimal(newAnimal)}
         />
       )}
     </>
