@@ -7,7 +7,6 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
-import { CardActionArea } from "@mui/material";
 import horseImage from "../assets/horse.jpg";
 import { BackLink } from "../Components/BackLink";
 
@@ -31,33 +30,29 @@ export const AnimalCard = () => {
     <Container sx={{ paddingBottom: 3, paddingTop: 3 }}>
       <BackLink to={backLinkHref}>Back to list</BackLink>
       <Card sx={{ maxWidth: 345, marginTop: 3 }}>
-        <CardActionArea>
-          <CardMedia
-            component="img"
-            height="200"
-            image={horseImage}
-            alt="horse"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {animal.name}
-            </Typography>
-            <Typography variant="body2" sx={{ marginBottom: 2 }}>
-              Age: {animal.age}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {animal.description}
-            </Typography>
-            <CardActions
-              sx={{ display: "flex", justifyContent: "space-around" }}
-            >
-              <Button size="small">Vet info</Button>
-              <Button size="small" id="exercisesList">
-                Exercises
-              </Button>
-            </CardActions>
-          </CardContent>
-        </CardActionArea>
+        <CardMedia
+          component="img"
+          height="200"
+          image={horseImage}
+          alt="horse"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {animal.name}
+          </Typography>
+          <Typography variant="body2" sx={{ marginBottom: 2 }}>
+            Age: {animal.age}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {animal.description}
+          </Typography>
+        </CardContent>
+        <CardActions sx={{ display: "flex", justifyContent: "space-around" }}>
+          <Button size="small">Vet info</Button>
+          <Button size="small" id="exercisesList">
+            Exercises
+          </Button>
+        </CardActions>
       </Card>
     </Container>
   );
