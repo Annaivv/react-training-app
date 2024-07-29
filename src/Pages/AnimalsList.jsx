@@ -51,7 +51,7 @@ export const Animals = () => {
 
   return (
     <>
-      <Box sx={{ width: "100%", paddingTop: "24px", textAlign: "center" }}>
+      <Box sx={{ width: "100%", padding: "24px", textAlign: "center" }}>
         <Stack spacing={2}>
           {animals.map((animal) => (
             <Item key={animal.id}>
