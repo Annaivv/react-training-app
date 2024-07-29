@@ -22,11 +22,13 @@ const MenuItem_1 = __importDefault(require("@mui/material/MenuItem"));
 const Search_1 = __importDefault(require("@mui/icons-material/Search"));
 const DynamicFeed_1 = __importDefault(require("@mui/icons-material/DynamicFeed"));
 const MenuItemLink_1 = require("./MenuItemLink");
-const menuItems = [
+let menuItems;
+menuItems = [
     { text: "Animals", to: "/animals" },
     { text: "Exercises", to: "/exercises" },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+let settings;
+settings = ["Profile", "Account", "Dashboard", "Logout"];
 const Search = (0, styles_1.styled)("div")(({ theme }) => ({
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -63,7 +65,7 @@ const StyledInputBase = (0, styles_1.styled)(InputBase_1.default)(({ theme }) =>
         },
     },
 }));
-function ResponsiveAppBar() {
+const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = react_1.default.useState(null);
     const [anchorElUser, setAnchorElUser] = react_1.default.useState(null);
     const handleOpenNavMenu = (event) => {
@@ -115,6 +117,6 @@ function ResponsiveAppBar() {
                             horizontal: "right",
                         }, open: Boolean(anchorElUser), onClose: handleCloseUserMenu }, settings.map((setting) => (react_1.default.createElement(MenuItem_1.default, { key: setting, onClick: handleCloseUserMenu },
                         react_1.default.createElement(Typography_1.default, { textAlign: "center" }, setting))))))))));
-}
+};
 exports.default = ResponsiveAppBar;
 //# sourceMappingURL=ResponsiveAppBar.js.map

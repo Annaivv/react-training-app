@@ -18,11 +18,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
 import { MenuItemLink } from "./MenuItemLink";
 
-const menuItems = [
+let menuItems: { text: string; to: string }[];
+menuItems = [
   { text: "Animals", to: "/animals" },
   { text: "Exercises", to: "/exercises" },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
+let settings: string[];
+settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -64,7 +67,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function ResponsiveAppBar() {
+const ResponsiveAppBar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] =
     React.useState<HTMLButtonElement | null>(null);
   const [anchorElUser, setAnchorElUser] =
@@ -197,5 +200,5 @@ function ResponsiveAppBar() {
       </Container>
     </AppBar>
   );
-}
+};
 export default ResponsiveAppBar;
