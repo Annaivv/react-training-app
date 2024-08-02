@@ -1,4 +1,5 @@
 import { create } from "zustand";
+//import { persist, createJSONStorage } from "zustand/middleware";
 
 const animalsInitialList = [
   { id: "a-1", name: "Abbat", age: 3, description: "Abbat description" },
@@ -20,20 +21,43 @@ interface IAnimal {
   description?: string;
 }
 
-interface IStoreState {
+interface AnimalProps {
   animals: IAnimal[];
+}
+
+interface AnimalState extends AnimalProps {
   addAnimal: (animal: IAnimal) => void;
   removeAnimal: (id: string) => void;
 }
 
-const useStore = create<IStoreState>((set) => ({
-  animals: animalsInitialList,
-  addAnimal: (animal) =>
-    set((state) => ({ animals: [...state.animals, animal] })),
-  removeAnimal: (id) =>
-    set((state) => ({
-      animals: state.animals.filter((animal) => animal.id !== id),
-    })),
-}));
+const createAnimalStore = (initProps?: Partial<AnimalProps>) => {
+  const DEFAULT_PROPS: AnimalProps = {
+    animals: animalsInitialList,
+  };
 
-export default useStore;
+  return create<AnimalState>()((set) => ({
+    ...DEFAULT_PROPS,
+    ...initProps,
+    addAnimal: (animal) =>
+      set((state) => ({ animals: [...state.animals, animal] })),
+    removeAnimal: (id) =>
+      set((state) => ({
+        animals: state.animals.filter((animal) => animal.id !== id),
+      })),
+  }));
+};
+
+// export const useBearStore = create(
+//   persist(
+//     (set, get) => ({
+//       bears: 0,
+//       addABear: () => set({ bears: get().bears + 1 }),
+//     }),
+//     {
+//       name: "food-storage", // name of the item in the storage (must be unique)
+//       storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+//     }
+//   )
+// );
+
+export const animalStore = createAnimalStore();

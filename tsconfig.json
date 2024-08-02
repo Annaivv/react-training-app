@@ -110,5 +110,10 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/Components/SharedLayout.tsx"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/Components/SharedLayout.tsx",
+    "src/Pages/ExerciseCard.jsx" //"src/custom.d.ts"
+  ]
 }

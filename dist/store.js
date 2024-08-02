@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.animalStore = void 0;
 const zustand_1 = require("zustand");
 const animalsInitialList = [
     { id: "a-1", name: "Abbat", age: 3, description: "Abbat description" },
@@ -13,12 +14,13 @@ const animalsInitialList = [
     { id: "a-9", name: "Gia", age: 21, description: "Gia description" },
     { id: "a-10", name: "Nordic", age: 8, description: "Nordic description" },
 ];
-const useStore = (0, zustand_1.create)((set) => ({
-    animals: animalsInitialList,
-    addAnimal: (animal) => set((state) => ({ animals: [...state.animals, animal] })),
-    removeAnimal: (id) => set((state) => ({
-        animals: state.animals.filter((animal) => animal.id !== id),
-    })),
-}));
-exports.default = useStore;
+const createAnimalStore = (initProps) => {
+    const DEFAULT_PROPS = {
+        animals: animalsInitialList,
+    };
+    return (0, zustand_1.create)()((set) => (Object.assign(Object.assign(Object.assign({}, DEFAULT_PROPS), initProps), { addAnimal: (animal) => set((state) => ({ animals: [...state.animals, animal] })), removeAnimal: (id) => set((state) => ({
+            animals: state.animals.filter((animal) => animal.id !== id),
+        })) })));
+};
+exports.animalStore = createAnimalStore();
 //# sourceMappingURL=store.js.map

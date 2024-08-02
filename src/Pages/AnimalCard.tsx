@@ -7,16 +7,17 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
-import horseImage from "../assets/horse.jpg";
+//import horseImage from "../assets/horse.jpg";
 import { BackLink } from "../Components/BackLink";
-import useStore from "../store";
+import { animalStore } from "../store";
 
-export const AnimalCard = () => {
+export const AnimalCard: React.FC = () => {
   const { id } = useParams();
-  const { animals } = useStore();
+  const animals = animalStore.getState().animals;
   const animal = animals.find((animal) => animal.id === id);
   const location = useLocation();
   const backLinkHref = location.state?.from ?? "/animals";
+  const horseImage = require("../assets/horse.jpg");
 
   if (!animal) {
     return <Typography>Animal not found</Typography>;
