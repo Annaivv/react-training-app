@@ -1,7 +1,7 @@
 import * as React from "react";
 import { nanoid } from "nanoid";
 import { useForm, Controller } from "react-hook-form";
-import type { SubmitHandler, DefaultValues } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
 import {
   Button,
   Container,
@@ -11,33 +11,19 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { FormValues } from "../commonTypes";
-
-export const defaultValues: DefaultValues<FormValues> = {
-  name: "",
-  description: "",
-};
-
-interface AddItemFormProps {
-  open: boolean;
-  additionalFields: React.ReactNode;
-  handleCloseForm: () => void;
-  handleAddItem: (newItem: { id: string } & FormValues) => void;
-}
+import { AddItemFormProps, FormValues } from "../commonTypes";
 
 export const AddItemForm: React.FC<AddItemFormProps> = ({
   open,
   handleCloseForm,
   handleAddItem,
-  additionalFields,
+  children,
 }) => {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormValues>({
-    defaultValues,
-  });
+  } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     const newItem = {
@@ -65,6 +51,7 @@ export const AddItemForm: React.FC<AddItemFormProps> = ({
                   {...field}
                   autoFocus
                   margin="dense"
+                  defaultValue={undefined}
                   id="name"
                   label="Name"
                   type="text"
@@ -72,6 +59,7 @@ export const AddItemForm: React.FC<AddItemFormProps> = ({
                   fullWidth
                   error={!!errors.name}
                   helperText={errors.name ? errors.name.message : ""}
+                  value={field.value ?? ""}
                 />
               )}
               name="name"
@@ -86,10 +74,13 @@ export const AddItemForm: React.FC<AddItemFormProps> = ({
                   {...field}
                   autoFocus
                   margin="dense"
+                  defaultValue={undefined}
                   id="description"
                   label="Description"
+                  multiline
                   type="text"
                   variant="filled"
+                  rows={4}
                   fullWidth
                   error={!!errors.description}
                   helperText={
@@ -100,7 +91,7 @@ export const AddItemForm: React.FC<AddItemFormProps> = ({
               name="description"
               control={control}
             />
-            {additionalFields}
+            {children}
             <DialogActions>
               <Button onClick={handleCloseForm}>Cancel</Button>
               <Button type="submit">Add Item</Button>

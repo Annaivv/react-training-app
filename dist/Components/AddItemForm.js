@@ -23,19 +23,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddItemForm = exports.defaultValues = void 0;
+exports.AddItemForm = void 0;
 const React = __importStar(require("react"));
 const nanoid_1 = require("nanoid");
 const react_hook_form_1 = require("react-hook-form");
 const material_1 = require("@mui/material");
-exports.defaultValues = {
-    name: "",
-    description: "",
-};
-const AddItemForm = ({ open, handleCloseForm, handleAddItem, additionalFields, }) => {
-    const { handleSubmit, control, formState: { errors }, } = (0, react_hook_form_1.useForm)({
-        defaultValues: exports.defaultValues,
-    });
+const AddItemForm = ({ open, handleCloseForm, handleAddItem, children, }) => {
+    const { handleSubmit, control, formState: { errors }, } = (0, react_hook_form_1.useForm)();
     const onSubmit = (data) => {
         const newItem = Object.assign({ id: (0, nanoid_1.nanoid)() }, data);
         handleAddItem(newItem);
@@ -47,11 +41,14 @@ const AddItemForm = ({ open, handleCloseForm, handleAddItem, additionalFields, }
             React.createElement(material_1.DialogTitle, null, "Please fill in the information"),
             React.createElement(material_1.DialogContent, null,
                 React.createElement("form", { onSubmit: handleSubmit(onSubmit) },
-                    React.createElement(react_hook_form_1.Controller, { render: ({ field }) => (React.createElement(material_1.TextField, Object.assign({}, field, { autoFocus: true, margin: "dense", id: "name", label: "Name", type: "text", variant: "filled", fullWidth: true, error: !!errors.name, helperText: errors.name ? errors.name.message : "" }))), name: "name", control: control, rules: {
+                    React.createElement(react_hook_form_1.Controller, { render: ({ field }) => {
+                            var _a;
+                            return (React.createElement(material_1.TextField, Object.assign({}, field, { autoFocus: true, margin: "dense", defaultValue: undefined, id: "name", label: "Name", type: "text", variant: "filled", fullWidth: true, error: !!errors.name, helperText: errors.name ? errors.name.message : "", value: (_a = field.value) !== null && _a !== void 0 ? _a : "" })));
+                        }, name: "name", control: control, rules: {
                             required: "This field is required",
                         } }),
-                    React.createElement(react_hook_form_1.Controller, { render: ({ field }) => (React.createElement(material_1.TextField, Object.assign({}, field, { autoFocus: true, margin: "dense", id: "description", label: "Description", type: "text", variant: "filled", fullWidth: true, error: !!errors.description, helperText: errors.description ? errors.description.message : "" }))), name: "description", control: control }),
-                    additionalFields,
+                    React.createElement(react_hook_form_1.Controller, { render: ({ field }) => (React.createElement(material_1.TextField, Object.assign({}, field, { autoFocus: true, margin: "dense", defaultValue: undefined, id: "description", label: "Description", multiline: true, type: "text", variant: "filled", rows: 4, fullWidth: true, error: !!errors.description, helperText: errors.description ? errors.description.message : "" }))), name: "description", control: control }),
+                    children,
                     React.createElement(material_1.DialogActions, null,
                         React.createElement(material_1.Button, { onClick: handleCloseForm }, "Cancel"),
                         React.createElement(material_1.Button, { type: "submit" }, "Add Item")))))));
