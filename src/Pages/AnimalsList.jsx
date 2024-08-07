@@ -8,8 +8,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ClearIcon from "@mui/icons-material/Clear";
 import { getAnimals } from "../fakeAPI-animals";
 import { Link, useLocation } from "react-router-dom";
-import { AddNewAnimalForm } from "../Components/AddAnimalForm";
+//import { AddNewAnimalForm } from "../Components/AddAnimalForm";
 import { Typography } from "@mui/material";
+import { AddItemForm } from "../Components/AddItemForm";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -81,11 +82,12 @@ export const Animals = () => {
           <AddCircleIcon fontSize="large" />
         </IconButton>
       </Box>
+
       {open && (
-        <AddNewAnimalForm
+        <AddItemForm
           open={open}
           handleCloseForm={handleCloseForm}
-          handleAddAnimal={handleAddAnimal}
+          handleAddItem={handleAddAnimal}
         />
       )}
     </>
