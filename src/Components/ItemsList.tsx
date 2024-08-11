@@ -1,15 +1,9 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
-import IconButton from "@mui/material/IconButton";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { Box, IconButton, Paper, Stack, Typography } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
-import { getAnimals } from "../fakeAPI-animals";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Link, useLocation } from "react-router-dom";
-import { AddAnimalForm } from "../Components/AddAnimalForm";
-import { Typography } from "@mui/material";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -21,31 +15,47 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export const Animals = () => {
+interface ItemsListProps<T> {
+  itemsKey: string;
+  getItems: () => T[];
+  AddItemForm: React.ComponentType<{
+    open: boolean;
+    handleCloseForm: () => void;
+    handleAddItem: (item: T) => void;
+  }>;
+}
+
+export const ItemsList = <T extends { id: string; name: string }>({
+  itemsKey,
+  getItems,
+  AddItemForm,
+}: ItemsListProps<T>) => {
   const location = useLocation();
-  const [animals, setAnimals] = React.useState(() => {
-    const savedAnimals = localStorage.getItem("animals");
-    return savedAnimals ? JSON.parse(savedAnimals) : getAnimals();
+
+  const [items, setItems] = React.useState<T[]>(() => {
+    const savedItems = localStorage.getItem(itemsKey);
+    return savedItems ? JSON.parse(savedItems) : getItems();
   });
+
   const [open, setOpen] = React.useState(false);
 
   const handleOpenForm = () => setOpen(true);
 
   const handleCloseForm = () => setOpen(false);
 
-  const handleAddAnimal = (newAnimal) => {
-    setAnimals((prevAnimals) => {
-      const updatedAnimals = [...prevAnimals, newAnimal];
-      localStorage.setItem("animals", JSON.stringify(updatedAnimals));
-      return updatedAnimals;
+  const handleAddItem = (newItem: T) => {
+    setItems((prevItems) => {
+      const updatedItems = [...prevItems, newItem];
+      localStorage.setItem(itemsKey, JSON.stringify(updatedItems));
+      return updatedItems;
     });
   };
 
-  const handleRemoveAnimal = (id) => {
-    setAnimals((prevAnimals) => {
-      const updatedAnimals = prevAnimals.filter((animal) => animal.id !== id);
-      localStorage.setItem("animals", JSON.stringify(updatedAnimals));
-      return updatedAnimals;
+  const handleRemoveItem = (id: string) => {
+    setItems((prevItems) => {
+      const updatedItems = prevItems.filter((item) => item.id !== id);
+      localStorage.setItem(itemsKey, JSON.stringify(updatedItems));
+      return updatedItems;
     });
   };
 
@@ -53,19 +63,19 @@ export const Animals = () => {
     <>
       <Box sx={{ width: "100%", padding: "24px", textAlign: "center" }}>
         <Stack spacing={2}>
-          {animals.map((animal) => (
-            <Item key={animal.id}>
+          {items.map((item) => (
+            <Item key={item.id}>
               <Link
-                to={`/animals/${animal.id}`}
+                to={`/${itemsKey}/${item.id}`}
                 state={{ from: location }}
                 style={{ textDecoration: "none", flexGrow: 1 }}
               >
-                <Typography color="primary">{animal.name}</Typography>
+                <Typography color="primary">{item.name}</Typography>
               </Link>
               <IconButton
                 color="error"
                 aria-label="remove animal"
-                onClick={() => handleRemoveAnimal(animal.id)}
+                onClick={() => handleRemoveItem(item.id)}
               >
                 <ClearIcon fontSize="medium" />
               </IconButton>
@@ -83,10 +93,10 @@ export const Animals = () => {
       </Box>
 
       {open && (
-        <AddAnimalForm
+        <AddItemForm
           open={open}
           handleCloseForm={handleCloseForm}
-          handleAddItem={handleAddAnimal}
+          handleAddItem={handleAddItem}
         />
       )}
     </>
