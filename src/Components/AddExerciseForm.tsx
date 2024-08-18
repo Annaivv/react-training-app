@@ -11,20 +11,19 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 interface IFormInput {
   name: string;
-  age: number;
   description?: string;
 }
 
-interface AddNewAnimalFormProps {
+interface AddNewExerciseFormProps {
   open: boolean;
   handleCloseForm: () => void;
-  handleAddAnimal: (newAnimal: IFormInput & { id: string }) => void;
+  handleAddExercise: (newExercise: IFormInput & { id: string }) => void;
 }
 
-export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
+export const AddNewExerciseForm: React.FC<AddNewExerciseFormProps> = ({
   open,
   handleCloseForm,
-  handleAddAnimal,
+  handleAddExercise,
 }) => {
   const {
     control,
@@ -33,20 +32,20 @@ export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    const newAnimal = {
+    const newExercise = {
       id: nanoid(),
       ...data,
     };
-    handleAddAnimal(newAnimal);
+    handleAddExercise(newExercise);
     handleCloseForm();
   };
 
   return (
     <Dialog open={open} onClose={handleCloseForm}>
-      <DialogTitle>Add Your Animal</DialogTitle>
+      <DialogTitle>Add New Exercise</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Please fill in the information about your animal.
+          Please fill in the information about your exercise.
         </DialogContentText>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
@@ -62,38 +61,12 @@ export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
                 autoFocus
                 margin="dense"
                 id="name"
-                label="Animal Name"
+                label="Exercise Title"
                 type="text"
                 fullWidth
                 variant="standard"
                 error={!!errors.name}
                 helperText={errors.name ? errors.name.message : ""}
-                value={field.value ?? ""}
-              />
-            )}
-          />
-
-          <Controller
-            name="age"
-            control={control}
-            defaultValue={undefined}
-            rules={{
-              required: "This field is required",
-              validate: (v) =>
-                (v !== undefined && v > 0) || "Age must be a positive number",
-            }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="dense"
-                id="age"
-                label="Animal Age (in years)"
-                type="number"
-                fullWidth
-                variant="standard"
-                error={!!errors.age}
-                helperText={errors.age ? errors.age.message : ""}
-                inputProps={{ min: 1 }}
                 value={field.value ?? ""}
               />
             )}
@@ -107,7 +80,7 @@ export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
                 {...field}
                 margin="dense"
                 id="description"
-                label="Animal Description"
+                label="Exercise Description"
                 type="text"
                 fullWidth
                 multiline
@@ -118,7 +91,7 @@ export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
           />
           <DialogActions>
             <Button onClick={handleCloseForm}>Cancel</Button>
-            <Button type="submit">Add Animal</Button>
+            <Button type="submit">Add Exercise</Button>
           </DialogActions>
         </form>
       </DialogContent>
