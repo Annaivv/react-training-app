@@ -10,7 +10,7 @@ export const AnimalsList = () => {
 
   const [animals, setAnimals] = React.useState<Animal[]>(() => {
     const savedAnimals = localStorage.getItem("animals");
-    const initialAnimals = getAnimals(); // Initial list from fake API
+    const initialAnimals = getAnimals();
     return savedAnimals
       ? [...initialAnimals, ...JSON.parse(savedAnimals)]
       : initialAnimals;

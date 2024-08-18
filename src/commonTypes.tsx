@@ -7,3 +7,7 @@ export interface Animal extends Item {
   age: number;
   description?: string;
 }
+
+export interface Exercise extends Item {
+  description?: string;
+}
