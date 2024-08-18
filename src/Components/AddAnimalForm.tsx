@@ -116,20 +116,6 @@ export const AddNewAnimalForm: React.FC<AddNewAnimalFormProps> = ({
               />
             )}
           />
-
-          {/* <input
-            accept="image/*"
-            style={{ display: "none" }}
-            id="photo"
-            name="animalPhoto"
-            type="file"
-          />
-          <label htmlFor="photo">
-            <Button variant="contained" component="span">
-              Upload Photo
-            </Button>
-          </label> */}
-
           <DialogActions>
             <Button onClick={handleCloseForm}>Cancel</Button>
             <Button type="submit">Add Animal</Button>
