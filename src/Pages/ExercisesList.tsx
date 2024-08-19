@@ -10,12 +10,7 @@ export const ExercisesList = () => {
 
   const [exercises, setExercises] = React.useState<Exercise[]>(() => {
     const savedExercises = localStorage.getItem("exercises");
-    const initialExercises = getExercises();
-    const allExercises = savedExercises
-      ? [...initialExercises, ...JSON.parse(savedExercises)]
-      : initialExercises;
-    console.log("Loaded exercises:", allExercises);
-    return allExercises;
+    return savedExercises ? JSON.parse(savedExercises) : getExercises();
   });
 
   const handleAddExercise = (newExercise: Exercise) => {
@@ -31,12 +26,22 @@ export const ExercisesList = () => {
     });
   };
 
+  const handleRemoveExercise = (id: string) => {
+    setExercises((prevExercises) => {
+      const updatedExercises = prevExercises.filter(
+        (exercise) => exercise.id !== id
+      );
+      localStorage.setItem("exrecises", JSON.stringify(updatedExercises));
+      return updatedExercises;
+    });
+  };
+
   return (
     <div>
       <ItemsList<Exercise>
         items={exercises}
         itemsKey="exercises"
-        setItems={setExercises}
+        handleRemoveItem={handleRemoveExercise}
         onAddButtonClick={() => setOpen(true)}
       />
       {open ? (

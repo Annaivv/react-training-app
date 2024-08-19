@@ -18,25 +18,17 @@ const Item = styled(Paper)(({ theme }) => ({
 interface ItemsListProps<T> {
   itemsKey: string;
   items: T[];
-  setItems: React.Dispatch<React.SetStateAction<T[]>>;
+  handleRemoveItem: (id: string) => void;
   onAddButtonClick: () => void;
 }
 
 export const ItemsList = <T extends { id: string; name: string }>({
   itemsKey,
   items,
-  setItems,
+  handleRemoveItem,
   onAddButtonClick,
 }: ItemsListProps<T>) => {
   const location = useLocation();
-
-  const handleRemoveItem = (id: string) => {
-    setItems((prevItems) => {
-      const updatedItems = prevItems.filter((item) => item.id !== id);
-      localStorage.setItem(itemsKey, JSON.stringify(updatedItems));
-      return updatedItems;
-    });
-  };
 
   return (
     <div>
@@ -53,7 +45,7 @@ export const ItemsList = <T extends { id: string; name: string }>({
               </Link>
               <IconButton
                 color="error"
-                aria-label="remove animal"
+                aria-label="remove item"
                 onClick={() => handleRemoveItem(item.id)}
               >
                 <ClearIcon fontSize="medium" />
@@ -63,7 +55,7 @@ export const ItemsList = <T extends { id: string; name: string }>({
         </Stack>
         <IconButton
           color="primary"
-          aria-label="add animal"
+          aria-label="add item"
           sx={{ paddingTop: "24px" }}
           onClick={onAddButtonClick}
         >

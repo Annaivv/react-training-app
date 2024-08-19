@@ -10,10 +10,7 @@ export const AnimalsList = () => {
 
   const [animals, setAnimals] = React.useState<Animal[]>(() => {
     const savedAnimals = localStorage.getItem("animals");
-    const initialAnimals = getAnimals();
-    return savedAnimals
-      ? [...initialAnimals, ...JSON.parse(savedAnimals)]
-      : initialAnimals;
+    return savedAnimals ? JSON.parse(savedAnimals) : getAnimals();
   });
 
   const handleAddAnimal = (newAnimal: Animal) => {
@@ -24,12 +21,20 @@ export const AnimalsList = () => {
     });
   };
 
+  const handleRemoveAnimal = (id: string) => {
+    setAnimals((prevAnimals) => {
+      const updatedAnimals = prevAnimals.filter((animal) => animal.id !== id);
+      localStorage.setItem("animals", JSON.stringify(updatedAnimals));
+      return updatedAnimals;
+    });
+  };
+
   return (
     <div>
       <ItemsList<Animal>
         items={animals}
         itemsKey="animals"
-        setItems={setAnimals}
+        handleRemoveItem={handleRemoveAnimal}
         onAddButtonClick={() => setOpen(true)}
       />
       {open ? (
