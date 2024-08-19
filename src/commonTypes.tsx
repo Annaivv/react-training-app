@@ -3,15 +3,15 @@ import React from "react";
 interface Item {
   id: string;
   name: string;
+  description?: string;
 }
 
 export interface Animal extends Item {
   age: number;
-  description?: string;
 }
 
 export interface Exercise extends Item {
-  description?: string;
+  image?: string;
 }
 
 export interface FormInput {
