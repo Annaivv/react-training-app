@@ -8,14 +8,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { FormInput, AddNewItemFormProps } from "../commonTypes";
+import { AddItemFormProps, FormInput } from "../interfaces/commonInterfaces";
 
-export const AddNewItemForm = ({
+export const AddItemForm = ({
   open,
   handleCloseForm,
   handleAddItem,
   children,
-}: AddNewItemFormProps) => {
+}: AddItemFormProps) => {
   const {
     control,
     handleSubmit,

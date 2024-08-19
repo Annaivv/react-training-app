@@ -5,23 +5,12 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { Exercise } from "../commonTypes";
+import { Exercise } from "../interfaces/exerciseInterfaces";
 import { BackLink } from "../Components/BackLink";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import { VisuallyHiddenInput } from "../styledComponents";
+import { exercisesKey } from "./ExercisesList";
 
 export const ExerciseCard = () => {
   const { id } = useParams<{ id: string }>();
@@ -38,7 +27,7 @@ export const ExerciseCard = () => {
 
   React.useEffect(() => {
     const savedExercises = JSON.parse(
-      localStorage.getItem("exercises") || "[]"
+      localStorage.getItem(exercisesKey) || "[]"
     ) as Exercise[];
 
     if (savedExercises.length === 0) {
@@ -65,7 +54,7 @@ export const ExerciseCard = () => {
       reader.onloadend = () => {
         const base64Image = reader.result as string;
 
-        const storedExercises = localStorage.getItem("exercises");
+        const storedExercises = localStorage.getItem(exercisesKey);
         if (storedExercises) {
           const exercises = JSON.parse(storedExercises);
 
@@ -76,7 +65,7 @@ export const ExerciseCard = () => {
             return exercise;
           });
 
-          localStorage.setItem("exercises", JSON.stringify(updatedExercises));
+          localStorage.setItem(exercisesKey, JSON.stringify(updatedExercises));
 
           setImageSrc(base64Image);
           setButtonText("Change");
@@ -90,7 +79,7 @@ export const ExerciseCard = () => {
   return (
     <Container sx={{ paddingBottom: 3, paddingTop: 3 }}>
       <BackLink to={backLinkHref}>Back to list</BackLink>
-      <Card sx={{ maxWidth: 345, marginTop: 3 }}>
+      <Card sx={{ maxWidth: 345, margin: "0 auto", marginTop: 3 }}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {exercise.name}

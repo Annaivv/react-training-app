@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import horseImage from "../assets/horse.jpg";
 import { BackLink } from "../Components/BackLink";
+import { animalsKey } from "./AnimalsList";
 
 export const AnimalCard = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ export const AnimalCard = () => {
   const backLinkHref = location.state?.from ?? "/animals";
 
   React.useEffect(() => {
-    const savedAnimals = JSON.parse(localStorage.getItem("animals"));
+    const savedAnimals = JSON.parse(localStorage.getItem(animalsKey));
     const foundAnimal = savedAnimals?.find((animal) => animal.id === id);
     setAnimal(foundAnimal);
   }, [id]);
@@ -29,7 +30,7 @@ export const AnimalCard = () => {
   return (
     <Container sx={{ paddingBottom: 3, paddingTop: 3 }}>
       <BackLink to={backLinkHref}>Back to list</BackLink>
-      <Card sx={{ maxWidth: 345, marginTop: 3 }}>
+      <Card sx={{ maxWidth: 345, margin: "0 auto", marginTop: 3 }}>
         <CardMedia
           component="img"
           height="200"
