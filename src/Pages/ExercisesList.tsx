@@ -11,15 +11,22 @@ export const ExercisesList = () => {
   const [exercises, setExercises] = React.useState<Exercise[]>(() => {
     const savedExercises = localStorage.getItem("exercises");
     const initialExercises = getExercises();
-    return savedExercises
+    const allExercises = savedExercises
       ? [...initialExercises, ...JSON.parse(savedExercises)]
       : initialExercises;
+    console.log("Loaded exercises:", allExercises);
+    return allExercises;
   });
 
   const handleAddExercise = (newExercise: Exercise) => {
     setExercises((prevExercises) => {
       const updatedExercises = [...prevExercises, newExercise];
-      localStorage.setItem("exercises", JSON.stringify(updatedExercises));
+      try {
+        localStorage.setItem("exercises", JSON.stringify(updatedExercises));
+        console.log("Exercises saved to localStorage");
+      } catch (e) {
+        console.error("Error saving to localStorage", e);
+      }
       return updatedExercises;
     });
   };
