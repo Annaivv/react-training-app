@@ -44,7 +44,7 @@ export const ExerciseCard = () => {
     }
 
     setExercise(foundExercise);
-  }, [id]);
+  }, [numericId, id]);
 
   if (!exercise) {
     return <div>Loading...</div>;

@@ -17,21 +17,25 @@ export const ExercisesList = () => {
   }, []);
 
   async function getExercises() {
-    const { data } = await supabase.from("exercises").select();
+    const { data } = await supabase.from(exercisesKey).select();
     setExercises(data as Exercise[]);
+    console.log(data);
   }
 
-  const handleAddExercise = (newExercise: Exercise) => {
-    setExercises((prevExercises) => {
-      const updatedExercises = [...prevExercises, newExercise];
-      try {
-        localStorage.setItem(exercisesKey, JSON.stringify(updatedExercises));
-        console.log("Exercises saved to localStorage");
-      } catch (e) {
-        console.error("Error saving to localStorage", e);
-      }
-      return updatedExercises;
-    });
+  const handleAddExercise = async (newExercise: Exercise): Promise<void> => {
+    const { data, error } = await supabase
+      .from(exercisesKey)
+      .insert(newExercise)
+      .select();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+    setExercises((prevExercises) => [
+      ...prevExercises,
+      ...(data as Exercise[]),
+    ]);
   };
 
   const handleRemoveExercise = (id: number) => {

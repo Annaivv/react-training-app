@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+//import { nanoid } from "nanoid";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -8,6 +8,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { AddItemFormProps, FormInput } from "../interfaces/commonInterfaces";
+
+function generateTimestampId(): number {
+  return Date.now();
+}
 
 export const AddItemForm = ({
   open,
@@ -23,7 +27,7 @@ export const AddItemForm = ({
 
   const onSubmit: SubmitHandler<FormInput> = (data) => {
     const item = {
-      id: nanoid(),
+      id: generateTimestampId(),
       ...data,
     };
     handleAddItem(item);
