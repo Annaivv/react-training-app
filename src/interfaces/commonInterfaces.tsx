@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface Item {
-  id: string;
+  id: number;
   name: string;
   description?: string;
 }

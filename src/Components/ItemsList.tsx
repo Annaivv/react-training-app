@@ -8,11 +8,11 @@ import { Item } from "../styledComponents";
 interface ItemsListProps<T> {
   itemsKey: string;
   items: T[];
-  handleRemoveItem: (id: string) => void;
+  handleRemoveItem: (id: number) => void;
   onAddButtonClick: () => void;
 }
 
-export const ItemsList = <T extends { id: string; name: string }>({
+export const ItemsList = <T extends { id: number; name: string }>({
   itemsKey,
   items,
   handleRemoveItem,

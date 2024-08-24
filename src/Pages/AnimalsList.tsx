@@ -23,7 +23,7 @@ export const AnimalsList = () => {
     });
   };
 
-  const handleRemoveAnimal = (id: string) => {
+  const handleRemoveAnimal = (id: number) => {
     setAnimals((prevAnimals) => {
       const updatedAnimals = prevAnimals.filter((animal) => animal.id !== id);
       localStorage.setItem(animalsKey, JSON.stringify(updatedAnimals));
