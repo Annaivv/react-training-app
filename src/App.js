@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { SharedLayout } from "./Components/SharedLayout";
-import { Home } from "./Pages/Home";
+import Home from "./Pages/Home";
 import { AnimalsList } from "./Pages/AnimalsList";
 import { ExercisesList } from "../src/Pages/ExercisesList";
 import { AnimalCard } from "./Pages/AnimalCard";

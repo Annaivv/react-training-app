@@ -1,4 +1,3 @@
-import * as React from "react";
 import { nanoid } from "nanoid";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Button from "@mui/material/Button";
