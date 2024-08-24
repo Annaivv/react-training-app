@@ -1,25 +1,39 @@
 import * as React from "react";
 import { getExercises } from "../fakeAPI-exercises";
 import { useOpen } from "../utils/useOpen";
-import { Exercise } from "../commonTypes";
+import { Exercise } from "../interfaces/exerciseInterfaces";
 import { ItemsList } from "../Components/ItemsList";
-import { AddNewExerciseForm } from "../Components/AddExerciseForm";
+import { AddExerciseForm } from "../Components/AddExerciseForm";
+
+export const exercisesKey = "exercises";
 
 export const ExercisesList = () => {
   const { open, setOpen } = useOpen();
 
   const [exercises, setExercises] = React.useState<Exercise[]>(() => {
-    const savedExercises = localStorage.getItem("exercises");
-    const initialExercises = getExercises();
-    return savedExercises
-      ? [...initialExercises, ...JSON.parse(savedExercises)]
-      : initialExercises;
+    const savedExercises = localStorage.getItem(exercisesKey);
+    return savedExercises ? JSON.parse(savedExercises) : getExercises();
   });
 
   const handleAddExercise = (newExercise: Exercise) => {
     setExercises((prevExercises) => {
       const updatedExercises = [...prevExercises, newExercise];
-      localStorage.setItem("exercises", JSON.stringify(updatedExercises));
+      try {
+        localStorage.setItem(exercisesKey, JSON.stringify(updatedExercises));
+        console.log("Exercises saved to localStorage");
+      } catch (e) {
+        console.error("Error saving to localStorage", e);
+      }
+      return updatedExercises;
+    });
+  };
+
+  const handleRemoveExercise = (id: string) => {
+    setExercises((prevExercises) => {
+      const updatedExercises = prevExercises.filter(
+        (exercise) => exercise.id !== id
+      );
+      localStorage.setItem(exercisesKey, JSON.stringify(updatedExercises));
       return updatedExercises;
     });
   };
@@ -28,12 +42,12 @@ export const ExercisesList = () => {
     <div>
       <ItemsList<Exercise>
         items={exercises}
-        itemsKey="exercises"
-        setItems={setExercises}
+        itemsKey={exercisesKey}
+        handleRemoveItem={handleRemoveExercise}
         onAddButtonClick={() => setOpen(true)}
       />
       {open ? (
-        <AddNewExerciseForm
+        <AddExerciseForm
           open={open}
           handleCloseForm={() => setOpen(false)}
           handleAddExercise={handleAddExercise}

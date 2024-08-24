@@ -15,6 +15,7 @@ export const BackLink: React.FC<BackLinkProps> = ({ to, children }) => {
       startIcon={<ArrowBackIcon />}
       component={Link}
       to={to}
+      sx={{ marginLeft: 3 }}
     >
       {children}
     </Button>
