@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import {
+  Button,
   FormControl,
   IconButton,
   InputAdornment,
@@ -9,6 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { supabase } from "../supabaseClient";
 
 interface IFormInputs {
   email: string;
@@ -22,9 +24,31 @@ export const Auth = () => {
       password: "",
     },
   });
-  const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data);
 
   const [showPassword, setShowPassword] = React.useState(false);
+
+  const signUp = async (email: string, password: string) => {
+    try {
+      let { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      } else {
+        console.log(data);
+        return data;
+      }
+    } catch (error) {
+      console.error("Signup failed", error);
+      return null;
+    }
+  };
+
+  const onSubmit: SubmitHandler<IFormInputs> = ({ email, password }) => {
+    signUp(email, password);
+  };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -41,6 +65,7 @@ export const Auth = () => {
         control={control}
         rules={{
           required: "This field is required",
+          maxLength: 100,
         }}
         render={({ field }) => <TextField {...field} label="Email" autoFocus />}
       />
@@ -75,7 +100,9 @@ export const Auth = () => {
           </FormControl>
         )}
       />
-      <input type="submit" value="Register" />
+      <Button type="submit" variant="contained" color="primary">
+        Register
+      </Button>
     </form>
   );
 };
