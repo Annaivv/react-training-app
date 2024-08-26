@@ -1,7 +1,7 @@
 import * as React from "react";
 import { supabase } from "../supabaseClient";
 import { Session } from "@supabase/supabase-js";
-import Auth from "../Auth/Auth";
+import { Auth } from "../Auth/Auth";
 import Account from "./Account";
 
 export default function Home() {

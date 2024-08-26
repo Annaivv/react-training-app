@@ -1,5 +1,6 @@
 import * as React from "react";
 import { supabase } from "../supabaseClient";
+
 import { useOpen } from "../utils/useOpen";
 import { Exercise } from "../interfaces/exerciseInterfaces";
 import { ItemsList } from "../Components/ItemsList";
@@ -19,7 +20,6 @@ export const ExercisesList = () => {
   async function getExercises() {
     const { data } = await supabase.from(exercisesKey).select();
     setExercises(data as Exercise[]);
-    console.log(data);
   }
 
   const handleAddExercise = async (newExercise: Exercise): Promise<void> => {
@@ -38,14 +38,37 @@ export const ExercisesList = () => {
     ]);
   };
 
-  const handleRemoveExercise = (id: number) => {
-    setExercises((prevExercises) => {
-      const updatedExercises = prevExercises.filter(
-        (exercise) => exercise.id !== id
-      );
-      localStorage.setItem(exercisesKey, JSON.stringify(updatedExercises));
-      return updatedExercises;
-    });
+  const handleRemoveExercise = async (id: number): Promise<void> => {
+    try {
+      // Attempt to delete the exercise from Supabase
+      const { data, error } = await supabase
+        .from(exercisesKey)
+        .delete()
+        .eq("id", id)
+        .select();
+
+      // Log the response data and error
+      console.log("Data:", data);
+      console.log("Error:", error);
+
+      // Check if there was an error during deletion
+      if (error) {
+        console.error("Error deleting exercise:", error.message);
+        return;
+      }
+
+      // If deletion was successful, update local state
+      setExercises((prevExercises) => {
+        const updatedExercises = prevExercises.filter(
+          (exercise) => exercise.id !== id
+        );
+        console.log("Updated Exercises:", updatedExercises);
+        return updatedExercises;
+      });
+    } catch (err) {
+      // Catch any unexpected errors
+      console.error("Unexpected error:", err);
+    }
   };
 
   return (

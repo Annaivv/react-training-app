@@ -7,6 +7,8 @@ interface AccountProps {
   session: Session;
 }
 
+export let userId: string | null = null;
+
 export default function Account({ session }: AccountProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [username, setUsername] = useState<string | null>(null);
@@ -39,9 +41,11 @@ export default function Account({ session }: AccountProps) {
     }
 
     getProfile();
+    console.log(session.user.id);
 
     return () => {
       ignore = true;
+      userId = session.user.id;
     };
   }, [session]);
 
