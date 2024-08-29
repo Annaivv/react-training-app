@@ -27,21 +27,40 @@ export const Auth = () => {
 
   const [showPassword, setShowPassword] = React.useState(false);
 
+  // const signInWithEmail = async () => {
+  //   const { data, error } = await supabase.auth.signInWithPassword({
+  //     email: "example@email.com",
+  //     password: "example-password",
+  //   });
+  // };
+
   const signUp = async (email: string, password: string) => {
     try {
       let { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: "https://localhost:3000/exercises",
+        },
       });
 
       if (error) {
         throw new Error(error.message);
       } else {
         console.log(data);
+        if (data.user) {
+          window.location.href = "https://localhost:3000/exercises";
+        }
         return data;
       }
     } catch (error) {
-      console.error("Signup failed", error);
+      const errorMessage = (error as Error).message;
+      if (!errorMessage.includes("Email rate limit exceeded")) {
+        console.log("Other error occured");
+      } else {
+        console.log("Limit exceeded message");
+      }
+
       return null;
     }
   };
