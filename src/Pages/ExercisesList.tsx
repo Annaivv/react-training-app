@@ -38,7 +38,7 @@ export const ExercisesList = () => {
     ]);
   };
 
-  const handleRemoveExercise = async (id: number): Promise<void> => {
+  const handleRemoveExercise = async (id: string): Promise<void> => {
     try {
       // Attempt to delete the exercise from Supabase
       const { data, error } = await supabase

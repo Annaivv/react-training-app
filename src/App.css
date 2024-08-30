@@ -46,7 +46,7 @@ form {
   gap: 18px;
 }
 
-button[type="submit"],
+/* button[type="submit"],
 input[type="submit"] {
   background: #ec5990;
   color: white;
@@ -72,4 +72,4 @@ input[type="submit"]:active {
   transform: translateY(3px);
   border: 1px solid transparent;
   opacity: 0.8;
-}
+} */

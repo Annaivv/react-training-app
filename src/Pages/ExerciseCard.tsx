@@ -14,7 +14,6 @@ import { exercisesKey } from "./ExercisesList";
 
 export const ExerciseCard = () => {
   const { id } = useParams<{ id: string }>();
-  const numericId = Number(id);
 
   const [exercise, setExercise] = React.useState<Exercise | undefined>(
     undefined
@@ -35,16 +34,14 @@ export const ExerciseCard = () => {
       console.warn("No exercises found in localStorage.");
     }
 
-    const foundExercise = savedExercises.find(
-      (exercise) => exercise.id === numericId
-    );
+    const foundExercise = savedExercises.find((exercise) => exercise.id === id);
 
     if (!foundExercise) {
       console.error(`Exercise with id ${id} not found.`);
     }
 
     setExercise(foundExercise);
-  }, [numericId, id]);
+  }, [id]);
 
   if (!exercise) {
     return <div>Loading...</div>;

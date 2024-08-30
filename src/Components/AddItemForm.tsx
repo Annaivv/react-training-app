@@ -1,5 +1,6 @@
 //import { nanoid } from "nanoid";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -8,10 +9,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { AddItemFormProps, FormInput } from "../interfaces/commonInterfaces";
-
-function generateTimestampId(): number {
-  return Date.now();
-}
 
 export const AddItemForm = ({
   open,
@@ -27,7 +24,7 @@ export const AddItemForm = ({
 
   const onSubmit: SubmitHandler<FormInput> = (data) => {
     const item = {
-      id: generateTimestampId(),
+      id: uuidv4(),
       ...data,
     };
     handleAddItem(item);
@@ -55,7 +52,7 @@ export const AddItemForm = ({
                 autoFocus
                 margin="dense"
                 id="name"
-                label="Animal Name"
+                label="Name"
                 type="text"
                 fullWidth
                 variant="standard"
