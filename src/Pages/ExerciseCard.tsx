@@ -10,7 +10,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Exercise } from "../interfaces/exerciseInterfaces";
 import { BackLink } from "../Components/BackLink";
 import { VisuallyHiddenInput } from "../styledComponents";
-import { exercisesKey } from "./ExercisesList";
+import { exercisesKey } from "../constants";
 
 export const ExerciseCard = () => {
   const { id } = useParams<{ id: string }>();
