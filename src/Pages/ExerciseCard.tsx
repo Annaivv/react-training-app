@@ -11,6 +11,7 @@ import { Exercise } from "../interfaces/exerciseInterfaces";
 import { BackLink } from "../Components/BackLink";
 import { VisuallyHiddenInput } from "../styledComponents";
 import { exercisesKey } from "../constants";
+import { supabase } from "../supabaseClient";
 
 export const ExerciseCard = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,22 +26,21 @@ export const ExerciseCard = () => {
   const location = useLocation();
   const backLinkHref = location.state?.from ?? "/exercises";
 
+  const findExerciseById = async (exerciseId: string) => {
+    const { data, error } = await supabase
+      .from(exercisesKey)
+      .select()
+      .eq("id", exerciseId)
+      .single();
+
+    if (error) console.error("No exercise found", error);
+    else setExercise(data || undefined);
+  };
+
   React.useEffect(() => {
-    const savedExercises = JSON.parse(
-      localStorage.getItem(exercisesKey) || "[]"
-    ) as Exercise[];
-
-    if (savedExercises.length === 0) {
-      console.warn("No exercises found in localStorage.");
+    if (id) {
+      findExerciseById(id);
     }
-
-    const foundExercise = savedExercises.find((exercise) => exercise.id === id);
-
-    if (!foundExercise) {
-      console.error(`Exercise with id ${id} not found.`);
-    }
-
-    setExercise(foundExercise);
   }, [id]);
 
   if (!exercise) {
