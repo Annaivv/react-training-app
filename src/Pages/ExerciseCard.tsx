@@ -16,11 +16,9 @@ import { supabase } from "../supabaseClient";
 export const ExerciseCard = () => {
   const { id } = useParams<{ id: string }>();
 
-  const [exercise, setExercise] = React.useState<Exercise | undefined>(
-    undefined
-  );
+  const [exercise, setExercise] = React.useState<Exercise | null>(null);
 
-  const [imageSrc, setImageSrc] = React.useState<string | undefined>(undefined);
+  //const [imageSrc, setImageSrc] = React.useState<string | undefined>(undefined);
   const [buttonText, setButtonText] = React.useState<string>("Upload");
 
   const location = useLocation();
@@ -33,14 +31,38 @@ export const ExerciseCard = () => {
       .eq("id", exerciseId)
       .single();
 
-    if (error) console.error("No exercise found", error);
-    else setExercise(data || undefined);
+    if (error) {
+      console.error("No exercise found", error);
+      return null;
+    } else {
+      return data as Exercise;
+    }
   };
 
   React.useEffect(() => {
-    if (id) {
-      findExerciseById(id);
-    }
+    const fetchExerciseData = async () => {
+      if (id) {
+        const fetchedExercise = await findExerciseById(id);
+        setExercise(fetchedExercise);
+
+        //Not working version of rendering an image from Supabase Storage
+        // if (fetchedExercise && fetchedExercise.name) {
+        //   const getExerciseImageUrl = async (fileName: string) => {
+        //     const { data } = supabase.storage
+        //       .from("exercise-pics")
+        //       .getPublicUrl(`Dogs/${fileName}.jpg`);
+
+        //     if (data) {
+        //       setImageSrc(data.publicUrl);
+        //     }
+        //   };
+
+        //   getExerciseImageUrl(fetchedExercise.name);
+        // }
+      }
+    };
+
+    fetchExerciseData();
   }, [id]);
 
   if (!exercise) {
@@ -49,26 +71,29 @@ export const ExerciseCard = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
+    if (file && exercise) {
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const base64Image = reader.result as string;
 
-        const storedExercises = localStorage.getItem(exercisesKey);
-        if (storedExercises) {
-          const exercises = JSON.parse(storedExercises);
+        try {
+          const { data, error } = await supabase
+            .from(exercisesKey)
+            .update({ image: base64Image })
+            .eq("id", exercise.id)
+            .select();
 
-          const updatedExercises = exercises.map((exercise: any) => {
-            if (exercise.id === id) {
-              return { ...exercise, image: base64Image };
-            }
-            return exercise;
-          });
-
-          localStorage.setItem(exercisesKey, JSON.stringify(updatedExercises));
-
-          setImageSrc(base64Image);
-          setButtonText("Change");
+          if (error) {
+            console.error("Unable to load image", error);
+          } else {
+            console.log("Update successful", data);
+            setExercise((prevExercise) =>
+              prevExercise ? { ...prevExercise, image: base64Image } : null
+            );
+            setButtonText("Change");
+          }
+        } catch (error) {
+          console.error("An error occurred during file upload:", error);
         }
       };
 
@@ -87,10 +112,11 @@ export const ExerciseCard = () => {
           <Typography variant="body2" color="text.secondary">
             {exercise.description}
           </Typography>
+
           <Box>
-            {imageSrc ? (
+            {exercise.image ? (
               <img
-                src={imageSrc}
+                src={exercise.image}
                 alt="Uploaded exercise"
                 style={{ maxWidth: "100%", height: "auto" }}
               />
