@@ -17,8 +17,6 @@ export const ExerciseCard = () => {
   const { id } = useParams<{ id: string }>();
 
   const [exercise, setExercise] = React.useState<Exercise | null>(null);
-
-  //const [imageSrc, setImageSrc] = React.useState<string | undefined>(undefined);
   const [buttonText, setButtonText] = React.useState<string>("Upload");
 
   const location = useLocation();
