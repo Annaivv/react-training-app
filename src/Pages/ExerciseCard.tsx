@@ -12,6 +12,9 @@ import { BackLink } from "../Components/BackLink";
 import { VisuallyHiddenInput } from "../styledComponents";
 import { exercisesKey } from "../constants";
 import { supabase } from "../supabaseClient";
+//import MediaControlCard from "../Components/AudioPlayer";
+//import { CardActionArea } from "@mui/material";
+import AudioPlayer from "../Components/AudioPlayer";
 
 export const ExerciseCard = () => {
   const { id } = useParams<{ id: string }>();
@@ -131,6 +134,8 @@ export const ExerciseCard = () => {
               <VisuallyHiddenInput type="file" onChange={handleFileChange} />
             </Button>
           </Box>
+
+          <AudioPlayer />
         </CardContent>
       </Card>
     </Container>
