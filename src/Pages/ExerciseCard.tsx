@@ -91,29 +91,52 @@ export const ExerciseCard = () => {
   };
 
   const uploadAudioFile = async (file: File) => {
-    const fileName = `${Date.now()}_${file.name}`;
-    const filePath = `dogs/${fileName}`;
+    try {
+      const fileName = `${file.name}`;
+      const filePath = `dogs/${fileName}`;
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("exercise-audio")
+        .upload(filePath, file);
 
-    const { data, error } = await supabase.storage
-      .from("exercise-audio")
-      .upload(filePath, file);
+      if (uploadError) {
+        console.error("Error uploading file:", uploadError.message);
+        return;
+      }
+      console.log("File uploaded successfully:", uploadData);
 
-    if (error) {
-      console.error("Error uploading file:", error.message);
-      return;
+      const { data: publicUrlData } = supabase.storage
+        .from("exercise-audio")
+        .getPublicUrl(filePath);
+
+      const audioLink = publicUrlData.publicUrl;
+      console.log("Public URL of uploaded file:", audioLink);
+
+      const { data: updateData, error: updateError } = await supabase
+        .from(exercisesKey)
+        .update({ audio_file: audioLink })
+        .eq("id", exercise.id)
+        .select();
+
+      if (updateError) {
+        console.error("Unable to update audio file in database", updateError);
+        return;
+      }
+
+      console.log("Update successful:", updateData);
+      setExercise({ ...exercise, audio_file: audioLink });
+    } catch (error) {
+      console.error("An unexpected error occurred during file upload:", error);
     }
-
-    console.log("File uploaded successfully:", data);
-    return data.path;
   };
 
   const handleAudioFileChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const uploadedFile = event.target.files?.[0];
-    console.log(uploadedFile);
+
     if (uploadedFile) {
       uploadAudioFile(uploadedFile);
+      console.log(uploadedFile.name);
     }
   };
 
@@ -157,10 +180,7 @@ export const ExerciseCard = () => {
           <Box>
             {exercise.audio_file ? (
               <figure style={{ margin: 0, marginTop: "12px" }}>
-                <audio
-                  controls
-                  src="https://yfrkllvxnpmkrpiqtbhq.supabase.co/storage/v1/object/sign/exercise-audio/sit-audio.mp3?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJleGVyY2lzZS1hdWRpby9zaXQtYXVkaW8ubXAzIiwiaWF0IjoxNzI1Mjc3MzYzLCJleHAiOjE3NTY4MTMzNjN9.s3IYP8tnDdS35yqX_m9YW_ddsxDuez8DwCjMEfFr3Sk&t=2024-09-02T11%3A42%3A44.672Z"
-                ></audio>
+                <audio controls src={exercise.audio_file}></audio>
               </figure>
             ) : null}
 
