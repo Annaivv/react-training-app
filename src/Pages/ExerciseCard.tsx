@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import AudioFileIcon from "@mui/icons-material/AudioFile";
 import { Exercise } from "../interfaces/exerciseInterfaces";
 import { BackLink } from "../Components/BackLink";
 import { VisuallyHiddenInput } from "../styledComponents";
@@ -14,7 +15,7 @@ import { exercisesKey } from "../constants";
 import { supabase } from "../supabaseClient";
 //import MediaControlCard from "../Components/AudioPlayer";
 //import { CardActionArea } from "@mui/material";
-import AudioPlayer from "../Components/AudioPlayer";
+//import AudioPlayer from "../Components/AudioPlayer";
 
 export const ExerciseCard = () => {
   const { id } = useParams<{ id: string }>();
@@ -45,21 +46,6 @@ export const ExerciseCard = () => {
       if (id) {
         const fetchedExercise = await findExerciseById(id);
         setExercise(fetchedExercise);
-
-        //Not working version of rendering an image from Supabase Storage
-        // if (fetchedExercise && fetchedExercise.name) {
-        //   const getExerciseImageUrl = async (fileName: string) => {
-        //     const { data } = supabase.storage
-        //       .from("exercise-pics")
-        //       .getPublicUrl(`Dogs/${fileName}.jpg`);
-
-        //     if (data) {
-        //       setImageSrc(data.publicUrl);
-        //     }
-        //   };
-
-        //   getExerciseImageUrl(fetchedExercise.name);
-        // }
       }
     };
 
@@ -70,7 +56,9 @@ export const ExerciseCard = () => {
     return <div>Loading...</div>;
   }
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file && exercise) {
       const reader = new FileReader();
@@ -102,6 +90,33 @@ export const ExerciseCard = () => {
     }
   };
 
+  const uploadAudioFile = async (file: File) => {
+    const fileName = `${Date.now()}_${file.name}`;
+    const filePath = `dogs/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from("exercise-audio")
+      .upload(filePath, file);
+
+    if (error) {
+      console.error("Error uploading file:", error.message);
+      return;
+    }
+
+    console.log("File uploaded successfully:", data);
+    return data.path;
+  };
+
+  const handleAudioFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const uploadedFile = event.target.files?.[0];
+    console.log(uploadedFile);
+    if (uploadedFile) {
+      uploadAudioFile(uploadedFile);
+    }
+  };
+
   return (
     <Container sx={{ paddingBottom: 3, paddingTop: 3 }}>
       <BackLink to={backLinkHref}>Back to list</BackLink>
@@ -129,13 +144,43 @@ export const ExerciseCard = () => {
               variant="contained"
               tabIndex={-1}
               startIcon={<CloudUploadIcon />}
+              sx={{ display: "flex", marginTop: "8px", marginBottom: "8px" }}
             >
-              {buttonText} image
-              <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+              {exercise.image ? "Change " : "Upload "}image
+              <VisuallyHiddenInput
+                type="file"
+                onChange={handleImageFileChange}
+              />
             </Button>
           </Box>
 
-          <AudioPlayer />
+          <Box>
+            {exercise.audio_file ? (
+              <figure style={{ margin: 0, marginTop: "12px" }}>
+                <audio
+                  controls
+                  src="https://yfrkllvxnpmkrpiqtbhq.supabase.co/storage/v1/object/sign/exercise-audio/sit-audio.mp3?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJleGVyY2lzZS1hdWRpby9zaXQtYXVkaW8ubXAzIiwiaWF0IjoxNzI1Mjc3MzYzLCJleHAiOjE3NTY4MTMzNjN9.s3IYP8tnDdS35yqX_m9YW_ddsxDuez8DwCjMEfFr3Sk&t=2024-09-02T11%3A42%3A44.672Z"
+                ></audio>
+              </figure>
+            ) : null}
+
+            <Button
+              component="label"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              startIcon={<AudioFileIcon />}
+              sx={{ display: "flex", marginTop: "8px", marginBottom: "8px" }}
+            >
+              {buttonText} audio file
+              <VisuallyHiddenInput
+                type="file"
+                onChange={handleAudioFileChange}
+              />
+            </Button>
+          </Box>
+
+          {/* <AudioPlayer /> */}
         </CardContent>
       </Card>
     </Container>
