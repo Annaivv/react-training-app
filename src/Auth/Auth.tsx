@@ -6,18 +6,37 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  Link,
   OutlinedInput,
   TextField,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { supabase } from "../supabaseClient";
+import { Session } from "@supabase/supabase-js";
+import Account from "../Pages/Account";
 
 interface IFormInputs {
   email: string;
   password: string;
 }
 
-export const Auth = () => {
+interface AuthrProps {
+  setIsRegistered: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const Auth = ({ setIsRegistered }: AuthrProps) => {
+  const [session, setSession] = React.useState<Session | null>(null);
+
+  React.useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
+
   const { handleSubmit, control } = useForm<IFormInputs>({
     defaultValues: {
       email: "",
@@ -27,34 +46,30 @@ export const Auth = () => {
 
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const signUp = async (email: string, password: string) => {
-    try {
-      let { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+  async function signInWithEmail(email: string, password: string) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-      if (error) {
-        throw new Error(error.message);
-      } else {
-        console.log(data);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-        return data;
-      }
-    } catch (error) {
-      const errorMessage = (error as Error).message;
-      if (!errorMessage.includes("Email rate limit exceeded")) {
-        console.log(errorMessage);
-      } else {
-        console.log("Limit exceeded message");
-      }
+    let userData = user;
 
-      return null;
+    if (error) {
+      console.log(error.message);
+      return;
+    } else {
+      console.log("Data: ", data);
+      console.log("User: ", userData);
+      return data;
     }
-  };
+  }
 
   const onSubmit: SubmitHandler<IFormInputs> = ({ email, password }) => {
-    signUp(email, password);
+    signInWithEmail(email, password);
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -66,51 +81,65 @@ export const Auth = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-      <Controller
-        name="email"
-        control={control}
-        rules={{
-          required: "This field is required",
-          maxLength: 100,
-        }}
-        render={({ field }) => <TextField {...field} label="Email" autoFocus />}
-      />
-      <Controller
-        name="password"
-        control={control}
-        rules={{
-          required: "This field is required",
-        }}
-        render={({ field }) => (
-          <FormControl {...field} fullWidth variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">
-              Password
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl>
-        )}
-      />
-      <Button type="submit" variant="contained" color="primary">
-        Register
-      </Button>
-    </form>
+    <div>
+      {!session ? (
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+          <Controller
+            name="email"
+            control={control}
+            rules={{
+              required: "This field is required",
+              maxLength: 100,
+            }}
+            render={({ field }) => (
+              <TextField {...field} label="Email" autoFocus />
+            )}
+          />
+          <Controller
+            name="password"
+            control={control}
+            rules={{
+              required: "This field is required",
+            }}
+            render={({ field }) => (
+              <FormControl {...field} fullWidth variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+            )}
+          />
+          <Button onClick={() => setIsRegistered(false)}>
+            <Link sx={{ textAlign: "center" }}>
+              No account yet? Register here
+            </Link>
+          </Button>
+
+          <Button type="submit" variant="contained" color="primary">
+            Sign in
+          </Button>
+        </form>
+      ) : (
+        <Account key={session.user.id} session={session} />
+      )}
+    </div>
   );
 };
 

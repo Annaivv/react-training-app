@@ -1,28 +1,16 @@
 import * as React from "react";
-import { supabase } from "../supabaseClient";
-import { Session } from "@supabase/supabase-js";
 import { Auth } from "../Auth/Auth";
-import Account from "./Account";
+import { Register } from "../Auth/Register";
 
 export default function Home() {
-  const [session, setSession] = React.useState<Session | null>(null);
-
-  React.useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
+  const [isRegistered, setIsRegistered] = React.useState(true);
 
   return (
     <div className="container" style={{ padding: "50px 0 100px 0" }}>
-      {!session ? (
-        <Auth />
+      {isRegistered ? (
+        <Auth setIsRegistered={setIsRegistered} />
       ) : (
-        <Account key={session.user.id} session={session} />
+        <Register setIsRegistered={setIsRegistered} />
       )}
     </div>
   );
