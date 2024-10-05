@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./App.css";
 import { SharedLayout } from "./Components/SharedLayout";
 import Home from "./Pages/Home";
@@ -8,16 +9,20 @@ import { AnimalCard } from "./Pages/AnimalCard";
 import { ExerciseCard } from "./Pages/ExerciseCard";
 
 function App() {
+  const queryClient = new QueryClient();
+
   return (
-    <Routes>
-      <Route path="/" element={<SharedLayout />}>
-        <Route index element={<Home />} />
-        <Route path="animals" element={<AnimalsList />} />
-        <Route path="animals/:id" element={<AnimalCard />} />
-        <Route path="exercises" element={<ExercisesList />} />
-        <Route path="exercises/:id" element={<ExerciseCard />} />
-      </Route>
-    </Routes>
+    <QueryClientProvider client={queryClient}>
+      <Routes>
+        <Route path="/" element={<SharedLayout />}>
+          <Route index element={<Home />} />
+          <Route path="animals" element={<AnimalsList />} />
+          <Route path="animals/:id" element={<AnimalCard />} />
+          <Route path="exercises" element={<ExercisesList />} />
+          <Route path="exercises/:id" element={<ExerciseCard />} />
+        </Route>
+      </Routes>
+    </QueryClientProvider>
   );
 }
 
