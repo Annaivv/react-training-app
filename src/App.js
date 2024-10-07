@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import "./App.css";
 import { SharedLayout } from "./Components/SharedLayout";
 import Home from "./Pages/Home";
@@ -7,10 +7,9 @@ import { AnimalsList } from "./Pages/AnimalsList";
 import { ExercisesList } from "../src/Pages/ExercisesList";
 import { AnimalCard } from "./Pages/AnimalCard";
 import { ExerciseCard } from "./Pages/ExerciseCard";
+import { queryClient } from "./utils/http";
 
 function App() {
-  const queryClient = new QueryClient();
-
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>

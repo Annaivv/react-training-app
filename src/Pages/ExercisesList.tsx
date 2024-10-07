@@ -1,15 +1,17 @@
 //import * as React from "react";
 import { supabase } from "../supabaseClient";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { exercisesKey } from "../constants";
 import { useOpen } from "../utils/useOpen";
 import { Exercise } from "../interfaces/exerciseInterfaces";
 import { ItemsList } from "../Components/ItemsList";
 import { AddExerciseForm } from "../Components/AddExerciseForm";
 import { checkUser } from "../utils/checkUser";
+import { queryClient } from "../utils/http";
 
 export const ExercisesList = () => {
   const { open, setOpen } = useOpen();
+
   //const queryClient = useQueryClient();
 
   // const [exercises, setExercises] = React.useState<Exercise[]>([]);
@@ -53,30 +55,47 @@ export const ExercisesList = () => {
     queryFn: fetchExercises,
   });
 
-  const handleAddExercise = async (newExercise: Exercise): Promise<void> => {
-    // await checkUser(async (user) => {
-    //   const { error } = await supabase
-    //     .from(exercisesKey)
-    //     .insert([{ ...newExercise, user_id: user?.id }]);
+  const addExerciseMutation = useMutation({
+    mutationFn: async (newExercise: Exercise) => {
+      const user = await checkUser();
 
-    //   if (error) console.error(error);
-    //   else getExercises();
-    // });
-    console.log(newExercise);
+      const { error } = await supabase
+        .from(exercisesKey)
+        .insert([{ ...newExercise, user_id: user?.id }]);
+
+      if (error) console.error(error);
+      else console.log(newExercise);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [exercisesKey] });
+    },
+  });
+
+  const handleAddExercise = (newExercise: Exercise) => {
+    addExerciseMutation.mutate(newExercise);
   };
 
-  const handleRemoveExercise = async (exerciseId: string): Promise<void> => {
-    // await checkUser(async (user) => {
-    //   const { error } = await supabase
-    //     .from("exercises")
-    //     .delete()
-    //     .eq("id", exerciseId)
-    //     .eq("user_id", user?.id);
+  const deleteExerciseMutation = useMutation({
+    mutationFn: async (exerciseId: string) => {
+      const user = await checkUser();
+      const { error } = await supabase
+        .from("exercises")
+        .delete()
+        .eq("id", exerciseId)
+        .eq("user_id", user?.id);
 
-    //   if (error) console.error(error);
-    //   else getExercises();
-    // });
-    console.log(exerciseId);
+      if (error) console.error(error);
+      else console.log(exerciseId);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [exercisesKey] });
+    },
+  });
+
+  const handleRemoveExercise = async (exerciseId: string): Promise<void> => {
+    deleteExerciseMutation.mutate(exerciseId);
   };
 
   if (isLoading) {
