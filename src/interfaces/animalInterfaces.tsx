@@ -1,13 +1,13 @@
-import { Item, FormInput, AddItemFormProps } from "./commonInterfaces";
+import { Item, FormInput, AddItemFormProps } from './commonInterfaces';
 
 export interface Animal extends Item {
-  age: number;
+    age: number;
 }
 
 export interface AnimalFormInput extends FormInput {
-  age: number;
+    age: number;
 }
 export interface AddAnimalFormProps
-  extends Omit<AddItemFormProps, "handleAddItem" | "children"> {
-  handleAddAnimal: (newAnimal: Animal) => void;
+    extends Omit<AddItemFormProps, 'handleAddItem' | 'children'> {
+    handleAddAnimal: (newAnimal: Animal) => void;
 }

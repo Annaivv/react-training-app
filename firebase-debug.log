@@ -1,0 +1,22 @@
+[debug] [2024-11-24T18:00:49.927Z] ----------------------------------------------------------------------
+[debug] [2024-11-24T18:00:49.931Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\annas\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js
+[debug] [2024-11-24T18:00:49.931Z] CLI Version:   13.27.0
+[debug] [2024-11-24T18:00:49.932Z] Platform:      win32
+[debug] [2024-11-24T18:00:49.932Z] Node Version:  v22.11.0
+[debug] [2024-11-24T18:00:49.932Z] Time:          Sun Nov 24 2024 19:00:49 GMT+0100 (Central European Standard Time)
+[debug] [2024-11-24T18:00:49.932Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-11-24T18:00:49.936Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2024-11-24T18:00:49.986Z] TypeError: Cannot read properties of undefined (reading '0')
+    at Command.<anonymous> (C:\Users\annas\AppData\Roaming\npm\node_modules\firebase-tools\lib\index.js:58:21)
+    at Command.listener [as _actionHandler] (C:\Users\annas\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\commander\index.js:413:31)
+    at Command._parseCommand (C:\Users\annas\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\commander\index.js:914:14)
+    at Command.parse (C:\Users\annas\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\commander\index.js:717:10)
+    at Object.<anonymous> (C:\Users\annas\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js:129:22)
+    at Module._compile (node:internal/modules/cjs/loader:1546:14)
+    at Object..js (node:internal/modules/cjs/loader:1689:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:315:14)
+[error] 
+[error] Error: An unexpected error has occurred.
